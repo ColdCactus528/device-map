@@ -20,28 +20,66 @@ export interface IDevice {
   status: "on" | "off";
 }
 
-function makeCircleIcon(color: string, size = 28, border = "#0f172a"): DivIcon {
+function makeModelIcon(
+  model: IDevice["model"],
+  color: string,
+  size = 28,
+  isDraggable = false
+): DivIcon {
+  const s = size;
+  const pad = 2;
+  const half = s / 2;
+
+  const shape =
+    model === "basic"
+      ? `<circle cx="${half}" cy="${half}" r="${half - pad}" fill="${color}" stroke="#0f172a" stroke-width="2" />`
+      : model === "advanced"
+      ? `<rect x="${pad}" y="${pad}" width="${s - pad * 2}" height="${s - pad * 2}" rx="6" ry="6" fill="${color}" stroke="#0f172a" stroke-width="2" />`
+      : `<polygon points="${half},${pad} ${s - pad},${half} ${half},${s - pad} ${pad},${half}" fill="${color}" stroke="#0f172a" stroke-width="2" />`;
+
+  const svg = `<svg width="${s}" height="${s}" viewBox="0 0 ${s} ${s}" xmlns="http://www.w3.org/2000/svg">${shape}</svg>`;
+
+  const ring = isDraggable ? `<span class="drag-ring"></span>` : "";
+
   const html = `
-    <div style="
-      width:${size}px;height:${size}px;border-radius:50%;
-      background:${color};border:2px solid ${border};
-      box-shadow:0 2px 8px rgba(0,0,0,.25);
-    "></div>`;
+    <div class="device-icon-wrap${isDraggable ? " is-draggable" : ""}" style="--ring:#f59e0b;width:${s}px;height:${s}px">
+      ${svg}
+      ${ring}
+    </div>
+  `;
+
   return L.divIcon({
     className: "device-icon",
     html,
-    iconSize: [size, size],
-    iconAnchor: [size / 2, size / 2],
+    iconSize: [s, s],
+    iconAnchor: [s / 2, s / 2],
   });
 }
 
-const ICONS: Record<IDevice["model"], DivIcon> = {
-  basic: makeCircleIcon("#60a5fa"),
-  advanced: makeCircleIcon("#34d399"),
-  special: makeCircleIcon("#f472b6"),
-};
+function iconFor(model: IDevice["model"], isDraggable: boolean): DivIcon {
+  const palette: Record<IDevice["model"], string> = {
+    basic: "#60a5fa",
+    advanced: "#34d399",
+    special: "#f472b6",
+  };
+  return makeModelIcon(model, palette[model], 28, isDraggable);
+}
 
-const CHILD_ICON = makeCircleIcon("#94a3b8", 14, "#334155");
+
+const CHILD_ICON: DivIcon = (() => {
+  const size = 14;
+  const pad = 2;
+  const half = size / 2;
+  const svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="${half}" cy="${half}" r="${half - pad}" fill="#94a3b8" stroke="#334155" stroke-width="2" />
+  </svg>`;
+  return L.divIcon({
+    className: "device-icon",
+    html: `<div style="width:${size}px;height:${size}px">${svg}</div>`,
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2],
+  });
+})();
 
 const StatusChip: React.FC<{ status: IDevice["status"] }> = ({ status }) => (
   <span
@@ -103,14 +141,15 @@ const DeviceMarker: React.FC<{ device: IDevice; draggableId?: string }> = ({
   };
 
   useEffect(() => {
-    if (markerRef.current) markerRef.current.setIcon(ICONS[device.model]);
-  }, [device.model]);
+    if (markerRef.current) markerRef.current.setIcon(iconFor(device.model, isDraggable));
+  }, [device.model, isDraggable]);
 
   return (
     <Marker
       position={[device.lat, device.lon]}
-      icon={ICONS[device.model]}
+      icon={iconFor(device.model, isDraggable)}
       draggable={isDraggable}
+      title={isDraggable ? "Drag me" : device.name}
       ref={markerRef}
       eventHandlers={{ dragend: onDragEnd, dblclick: onDblClick }}
     >
@@ -148,13 +187,7 @@ const DeviceMap: React.FC<{ devices?: IDevice[] }> = ({
   const draggableId = devices[0]?.id;
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        width: "100%",
-        background: "#fff"
-      }}
-    >
+    <div style={{ height: "100vh", width: "100%", background: "#fff" }}>
       <MapContainer
         center={center}
         zoom={12}
