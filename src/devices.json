@@ -1,0 +1,14 @@
+[
+  { "id": "d01", "name": "Canary Wharf Hub",   "lat": 51.5050, "lon": -0.0900, "model": "special",  "status": "on"  },
+  { "id": "d02", "name": "Soho Sensor A13",    "lat": 51.5132, "lon": -0.1350, "model": "advanced", "status": "off" },
+  { "id": "d03", "name": "Shoreditch Node X",  "lat": 51.5240, "lon": -0.0780, "model": "basic",    "status": "on"  },
+  { "id": "d04", "name": "Southbank Unit S2",  "lat": 51.5071, "lon": -0.1150, "model": "advanced", "status": "on"  },
+  { "id": "d05", "name": "Chelsea Beacon 7",   "lat": 51.4870, "lon": -0.1740, "model": "basic",    "status": "off" },
+  { "id": "d06", "name": "Greenwich Gate Q",   "lat": 51.4820, "lon": -0.0070, "model": "special",  "status": "on"  },
+  { "id": "d07", "name": "Camden Probe M3",    "lat": 51.5400, "lon": -0.1420, "model": "advanced", "status": "off" },
+  { "id": "d08", "name": "Brixton Node B",     "lat": 51.4610, "lon": -0.1150, "model": "basic",    "status": "on"  },
+  { "id": "d09", "name": "King’s Cross Relay", "lat": 51.5320, "lon": -0.1250, "model": "special",  "status": "on"  },
+  { "id": "d10", "name": "Whitechapel Sentry", "lat": 51.5160, "lon": -0.0600, "model": "advanced", "status": "on"  },
+  { "id": "d11", "name": "Paddington Pod",     "lat": 51.5150, "lon": -0.1750, "model": "basic",    "status": "off" },
+  { "id": "d12", "name": "Hackney Anchor",     "lat": 51.5510, "lon": -0.0550, "model": "special",  "status": "off" }
+]
