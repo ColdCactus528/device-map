@@ -1,69 +1,44 @@
-# React + TypeScript + Vite
+# Device Map
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Интерактивное приложение на **React + Leaflet** для отображения устройств на карте.
 
-Currently, two official plugins are available:
+## 🌐 Демо
+Приложение доступно по адресу: [device-map.vercel.app](https://device-map.vercel.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Возможности
+- React 18 + TypeScript + Vite
+- React Leaflet + OpenStreetMap тайлы
+- Разные формы и цвета иконок для моделей устройств (`basic`, `advanced`, `special`)
+- Popup с информацией об устройстве (имя, модель, статус)
+- Дочерние маркеры для устройств, кроме `basic`
+- Один маркер перетаскиваемый — новые координаты выводятся в консоль
+- Поддержка Docker (сборка + запуск через Nginx)
+- Docker Compose для продакшн и разработки (с HMR)
 
-## Expanding the ESLint configuration
+## 📦 Установка и запуск (локально)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Склонировать репозиторий и установить зависимости:
+```bash
+git clone https://github.com/ColdCactus528/device-map.git
+cd device-map
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Запуск в режиме разработки:
 ```
+npm run dev
+```
+После открыть http://localhost:5173
+
+🗺️ Использование
+
+Двойной клик по маркеру → центрирование и увеличение карты.
+Перетаскивание выделенного маркера → новые координаты выводятся в консоль.
+Данные устройств находятся в src/devices.json
+
+🐳 Docker
+```
+docker build -t device-map .
+docker run --rm -p 8080:80 device-map
+```
+Приложение будет доступно по адресу http://localhost:8080
